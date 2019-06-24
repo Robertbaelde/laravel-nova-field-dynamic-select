@@ -3,6 +3,7 @@
         <template slot="field">
             <multiselect
                 v-model="value"
+                :multiple="field.multiselect"
                 :options="options"
                 :searchable="true"
                 track-by="value"
@@ -72,7 +73,15 @@ export default {
          */
         fill(formData) {
             if(this.value) {
-                formData.append(this.field.attribute, this.value.value)
+                if(Array.isArray(this.value)){
+                    formData.append(this.field.attribute, this.value.map(value => {
+                        return value.value;
+                    }));
+                }
+                else{
+                    formData.append(this.field.attribute, this.value.value)
+                }
+
             }
         },
 
