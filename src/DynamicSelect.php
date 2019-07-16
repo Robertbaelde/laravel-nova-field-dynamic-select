@@ -45,11 +45,20 @@ class DynamicSelect extends Field
         if ($request->exists($requestAttribute)) {
             if(array_key_exists($attribute, $model->getCasts()) && ($model->getCasts()[$attribute] === 'json' || $model->getCasts()[$attribute] === 'array'))
             {
-                $model->{$attribute} =  explode(',', $request[$requestAttribute]);
+                if($request[$requestAttribute] === null){
+                    $model->{$attribute} = [];
+                }
+                else{
+                    $model->{$attribute} =  explode(',', $request[$requestAttribute]);
+                }
+
             }
             else{
                 $model->{$attribute} = $request[$requestAttribute];
             }
+        }
+        else{
+            $model->{$attribute} = [];
         }
     }
 }
